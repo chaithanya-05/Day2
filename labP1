@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <string.h>
+
+//Read the inputs
+void getPatientDetails(char *patientName, char *wardType, int *days) {
+    printf("Enter Patient Name: ");
+    fgets(patientName, 100, stdin);
+    patientName[strcspn(patientName, "\n")] = 0; 
+    
+    printf("Enter Ward Type (G/S/P): ");
+    scanf(" %c", wardType);
+    
+    printf("Enter Number of Days: ");
+    scanf("%d", days);
+}
+
+//Total calculation
+float calculateBill(char wardType, int days) {
+    float chargePerDay;
+   
+    switch (wardType) {
+        case 'G': 
+            chargePerDay = 1000.0;
+            break;
+        case 'S':
+            chargePerDay = 2000.0;
+            break;
+        case 'P':
+            chargePerDay = 5000.0;
+            break;
+        default:
+            printf("Invalid ward type.\n");
+            return 0.0; 
+    }
+    
+    // Calculate total bill
+    float totalBill = chargePerDay * days;
+    
+    // Apply discount if applicable
+    if (days > 7) {
+        totalBill *= 0.95; // Apply 5% discount
+    }
+    
+    return totalBill;
+}
+
+//Display the bill details
+void displayBill(char *patientName, float totalBill, float discount) {
+    // Calculate the total bill before discount
+    float totalBillBeforeDiscount = (discount > 0) ? (totalBill / 0.95) : totalBill;
+    
+    // Output the results
+    printf("\nPatient Name: %s\n", patientName);
+    printf("Total Bill Before Discount: ₹%.2f\n", totalBillBeforeDiscount);
+    printf("Discount Applied: ₹%.2f\n", discount);
+    printf("Final Bill Amount: ₹%.2f\n", totalBill);
+}
+
+
+int main() {
+    char patientName[100];
+    char wardType;
+    int days;
+    
+    // Get patient details 
+    getPatientDetails(patientName, &wardType, &days);
+    
+    // Calculate the total bill
+    float totalBill = calculateBill(wardType, days);
+    
+    // Calculate the discount if applicable
+    float discount = (days > 7) ? (totalBill / 0.95) - totalBill : 0.0;
+    
+    // Display the bill details
+    displayBill(patientName, totalBill, discount);
+    
+    return 0;
+}
+
+
+
+
+
